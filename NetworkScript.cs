@@ -2,13 +2,8 @@
 using System.Collections;
 
 public class NetworkScript : MonoBehaviour {
-	
-	public Transform spawnObject;
-	public GameObject playerPrefab;
 
-	public string sendText;
 	public bool[] gotSeq;
-	public string gotText;
 	public bool running;
 	
 	private float bttnW = 150;
@@ -59,16 +54,9 @@ public class NetworkScript : MonoBehaviour {
 		
 	}
 	
-	void spawnPlayer()
-	{
-		Network.Instantiate(playerPrefab, spawnObject.position, Quaternion.identity, 0);
-		spawnObject.position = new Vector3(spawnObject.position.x + 5, spawnObject.position.y, spawnObject.position.z);
-	}
-	
 	void OnServerInitialized()
 	{
 		Debug.Log("Server Initialized!");
-		spawnPlayer();
 	}
 	
 	void OnMasterServerEvent(MasterServerEvent mse)
@@ -77,11 +65,6 @@ public class NetworkScript : MonoBehaviour {
 		{
 			Debug.Log("Registered Server");
 		}
-	}
-	
-	void OnConnectedToServer()
-	{
-		spawnPlayer();
 	}
 
 	[RPC]
@@ -99,9 +82,6 @@ public class NetworkScript : MonoBehaviour {
 	{
 
 		if(Network.isClient){
-		//	sendText = GUILayout.TextField (sendText, 25);
-		//	networkView.RPC("setTasks", RPCMode.AllBuffered, sendText);
-
 			//controller
 			if(GUI.Button(new Rect(0,0,Screen.width/5,Screen.height/(noRows+1)),"Menu")){}
 			if(GUI.Button(new Rect(Screen.width/2-Screen.width/10,0,Screen.width/5,Screen.height/(noRows+1)),"Start/Stop")){
@@ -129,10 +109,6 @@ public class NetworkScript : MonoBehaviour {
 			{
 				if(GUI.Button(new Rect(Screen.width/6*i,Screen.height-Screen.height/(noRows+12),Screen.width/6,Screen.height/(noRows+12)),"Robot"+(i+1))){}
 			}
-		}
-
-		if(Network.isServer){
-			GUI.Label(new Rect(0,0,100,20), gotText);
 		}
 		
 		if (!Network.isClient && !Network.isServer)
